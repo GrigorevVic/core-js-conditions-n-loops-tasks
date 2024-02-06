@@ -65,8 +65,10 @@ function getMaxNumber(a, b, c) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
-function canQueenCaptureKing(/* queen, king */) {
-  throw new Error('Not implemented');
+function canQueenCaptureKing(queen, king) {
+  if (Math.abs(queen.x - king.x) === Math.abs(queen.y - king.y)) return true;
+  if (queen.x === king.x || queen.y === king.y) return true;
+  return false;
 }
 
 /**
@@ -87,10 +89,11 @@ function canQueenCaptureKing(/* queen, king */) {
  *  2, 2, 5   => false
  *  3, 0, 3   => false
  */
-function isIsoscelesTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isIsoscelesTriangle(a, b, c) {
+  if (a === 0 || b === 0 || c === 0) return false;
+  if (a + b <= c || a + c <= b || c + b <= a) return false;
+  return true;
 }
-
 /**
  * Converts a number to Roman numerals. The number will be between 1 and 39.
  * In this task, the use of methods of the String and Array classes is not allowed.
@@ -200,8 +203,16 @@ function convertNumberToString(numberStr) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  const len = str.length;
+  let j = len - 1;
+  for (let i = 0; i < len / 2; i += 1) {
+    if (str[i] !== str[j]) {
+      return false;
+    }
+    j -= 1;
+  }
+  return true;
 }
 
 /**
@@ -323,8 +334,16 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const newArr = arr;
+  for (let i = 0; i < newArr.length; i += 1) {
+    for (let j = 0; j < newArr.length - i; j += 1) {
+      if (newArr[j] > newArr[j + 1]) {
+        [newArr[j], newArr[j + 1]] = [newArr[j + 1], newArr[j]];
+      }
+    }
+  }
+  return newArr;
 }
 
 /**
@@ -344,8 +363,23 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let strCopy = str;
+  let oddIndex = '';
+  let newStr = '';
+  for (let i = 0; i < iterations; i += 1) {
+    for (let j = 0; j < str.length; j += 1) {
+      if (j % 2 === 0) {
+        newStr += strCopy[j];
+      } else {
+        oddIndex += strCopy[j];
+      }
+    }
+    strCopy = `${newStr}${oddIndex}`;
+    oddIndex = '';
+    newStr = '';
+  }
+  return strCopy;
 }
 
 /**

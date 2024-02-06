@@ -1,60 +1,53 @@
-function convertNumberToString(numberStr) {
-  const res = [];
-  for (let i = 0; i < numberStr.length; i += 1) {
-    switch (numberStr[i]) {
-      case '1':
-        res.push('one');
-        break;
+/*  Алгоритм сортировки выбором */
 
-      case '2':
-        res.push('two');
-        break;
-
-      case '3':
-        res.push('three');
-        break;
-
-      case '4':
-        res.push('four');
-        break;
-
-      case '5':
-        res.push('five');
-        break;
-
-      case '6':
-        res.push('six');
-        break;
-
-      case '7':
-        res.push('seven');
-        break;
-
-      case '8':
-        res.push('eight');
-        break;
-
-      case '9':
-        res.push('nine');
-        break;
-
-      case '0':
-        res.push('zero');
-        break;
-
-      case '.':
-        res.push('point');
-        break;
-
-      case ',':
-        res.push('zpt');
-        break;
-
-      default:
-        res.push('minus');
-        break;
+for (let i = 0; i < newArr.length; i++) {
+  let min = i;
+  for (let j = i + 1; j < newArr.length; j++) {
+    if (newArr[min] > newArr[j]) {
+      min = j; // Меняем значение переменной на наибольшее значение
     }
   }
-  return res.join(' ');
+  [newArr[i], newArr[min]] = [newArr[min], newArr[i]]; // Меняем значения переменных
 }
-console.log(convertNumberToString('-810'));
+
+
+/*  Алгоритм сортировки пузырьком */
+for (let i = 0; i < newArr.length; i += 1) {
+  for (let j = 0; j < newArr.length - i; j += 1) {
+    if (newArr[j] > newArr[j + 1]) {
+      [newArr[j], newArr[j + 1]] = [newArr[j + 1], newArr[j]]; // Меняем значения переменных
+    }
+  }
+}
+/*  Алгоритм циклической сортировки */
+for (let i = 0; i < newArr.length; i++) {
+  let value = newArr[i];
+  let position = i;
+
+  for (let j = i + 1; j < newArr.length; j++) {
+    if (newArr[j] < value) {
+      position++;
+    }
+  }
+  if (position === i) {
+    continue;
+  }
+  while (value === newArr[position]) { // Избавляемся от дубликатов
+    position++;
+  }
+
+  [newArr[position], value] = [value, newArr[position]]; // Меняем значения переменных
+
+  while (position !== i) { // Запускаем цикл в обратную сторону
+    position = i;
+    for (let k = i + 1; k < newArr.length; k++) {
+      if (newArr[k] < value) {
+        position++;
+      }
+    }
+    while (value === newArr[position]) { // Избавляемся от дубликатов
+      position++;
+    }
+    [newArr[position], value] = [value, newArr[position]]; // Меняем значения пременных
+  }
+}
