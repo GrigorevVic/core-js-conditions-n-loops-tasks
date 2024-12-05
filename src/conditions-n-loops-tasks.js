@@ -282,8 +282,24 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  let leftSum = arr[0];
+  let rightSum = 0;
+
+  for (let i = 2; i < arr.length; i += 1) {
+    rightSum += arr[i];
+  }
+
+  for (let i = 1; i < arr.length - 1; i += 1) {
+    if (leftSum === rightSum) {
+      return i;
+    }
+
+    leftSum += arr[i];
+    rightSum -= arr[i + 1];
+  }
+
+  return -1;
 }
 
 /**
@@ -307,8 +323,49 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+
+function getSpiralMatrix(size) {
+  const matrix = [];
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = new Array(size);
+  }
+
+  let top = 0;
+  let bottom = size - 1;
+  let left = 0;
+  let right = size - 1;
+  let count = 0;
+
+  while (count < size * size) {
+    for (let i = left; i <= right; i += 1) {
+      count += 1;
+      matrix[top][i] = count;
+    }
+    top += 1;
+
+    for (let i = top; i <= bottom; i += 1) {
+      count += 1;
+      matrix[i][right] = count;
+    }
+    right -= 1;
+
+    if (top <= bottom) {
+      for (let i = right; i >= left; i -= 1) {
+        count += 1;
+        matrix[bottom][i] = count;
+      }
+      bottom -= 1;
+    }
+
+    if (left <= right) {
+      for (let i = bottom; i >= top; i -= 1) {
+        count += 1;
+        matrix[i][left] = count;
+      }
+      left += 1;
+    }
+  }
+  return matrix;
 }
 
 /**
@@ -356,18 +413,35 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
+
 function sortByAsc(arr) {
   const newArr = arr;
-  for (let i = 0; i < newArr.length; i += 1) {
-    for (let j = 0; j < newArr.length - i; j += 1) {
-      if (newArr[j] > newArr[j + 1]) {
-        [newArr[j], newArr[j + 1]] = [newArr[j + 1], newArr[j]];
+
+  function quickSort(left, right) {
+    if (left < right) {
+      const pivot = newArr[right];
+      let i = left - 1;
+      for (let j = left; j < right; j += 1) {
+        if (newArr[j] <= pivot) {
+          i += 1;
+          const temp = newArr[i];
+          newArr[i] = newArr[j];
+          newArr[j] = temp;
+        }
       }
+      const temp = newArr[i + 1];
+      newArr[i + 1] = newArr[right];
+      newArr[right] = temp;
+
+      const index = i + 1;
+      quickSort(left, index - 1);
+      quickSort(index + 1, right);
     }
   }
+
+  quickSort(0, newArr.length - 1);
   return newArr;
 }
-
 /**
  * Shuffles characters in a string so that the characters with an odd index are moved to the end of the string at each iteration.
  * Take into account that the string can be very long and the number of iterations is large. Consider how you can optimize your solution.
@@ -385,23 +459,30 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
+
 function shuffleChar(str, iterations) {
-  let strCopy = str;
-  let oddIndex = '';
-  let newStr = '';
+  let shuffledStr = str;
+
   for (let i = 0; i < iterations; i += 1) {
+    let even = '';
+    let odd = '';
+
     for (let j = 0; j < str.length; j += 1) {
       if (j % 2 === 0) {
-        newStr += strCopy[j];
+        even += shuffledStr[j];
       } else {
-        oddIndex += strCopy[j];
+        odd += shuffledStr[j];
       }
     }
-    strCopy = `${newStr}${oddIndex}`;
-    oddIndex = '';
-    newStr = '';
+
+    shuffledStr = even + odd;
+
+    if (shuffledStr === str) {
+      return shuffleChar(str, iterations % (i + 1));
+    }
   }
-  return strCopy;
+
+  return shuffledStr;
 }
 
 /**
@@ -421,8 +502,25 @@ function shuffleChar(str, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+
+function getNearestBigger(number) {
+  let newNumber = number;
+  const array = [];
+  while (newNumber > 0) {
+    const digit = newNumber % 10;
+    array.unshift(digit);
+    newNumber = Math.floor(newNumber / 10);
+  }
+  for (let i = array.length - 1; i > 0; i -= 1) {
+    if (array[i] > array[i - 1]) {
+      const newNum = array.splice(i).sort((a, b) => a - b);
+      const index = newNum.findIndex((digit) => digit > array[i - 1]);
+      [array[i - 1], newNum[index]] = [newNum[index], array[i - 1]];
+      const result = parseInt([...array, ...newNum].join(''), 10);
+      return result;
+    }
+  }
+  return true;
 }
 
 module.exports = {
